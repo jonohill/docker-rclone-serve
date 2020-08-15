@@ -1,54 +1,57 @@
 # docker-rclone-serve
 
 This image proxies any rclone-supported backend and serves this as an SFTP server (using `rclone serve`).
-By proxying a back-end, you can share it with multiple devices or users without having to share the credentials directly.
+By proxying a back-end, you can share it with multiple devices or users without having to share the backend credentials.
 
-## User / backend configuration
+## rclone configuration
 
-Create a yaml file which defines a map of users to their auth details and backend config. To work out the available backend keys, configure it with rclone and look at the produced config file (e.g. `rclone config -config /path/to/file`).
-Because it's yaml you can use anchors to re-use bits, e.g. to have users share the same backend. To help with this, any keys starting with underscore are ignored (so users starting with underscore won't work, sorry).
+The rclone configuration file defines the available backends and is read from `$RCLONE_AUTH_PROXY_BACKENDS` (by default `/config/rclone.conf`).
+You can create this file using rclone: `rclone config --config rclone.conf`
 
-A user's auth details may contain `public_key` and/or `pass`. User passwords are just plaintext so you should really use key pairs.
+## User configuration
 
-Mount this file at `/config/users.yaml`.
+The user configuration file defines users' names and credentials, which backend the user has access to, and which backend path the user can access. 
+It is read from `$RCLONE_AUTH_PROXY_USERS` (by default `/config/users.conf`).
 
-Example
-```yaml
-_backend: &backend
-    type: sftp
-    host: sftp.example.com
-    user: sftpuser
-    pass: sftpsecret
-    _obscure: pass
+Check [rclone's docs](https://rclone.org/commands/rclone_serve_sftp/#auth-proxy) to understand better how `rclone serve` handles these details.
 
-user1:
-    pass: topsecret
-    backend:
-        <<: *backend
-        _root: /user1
+Example:
+```
+[user1]
+public_key = AAAAC3NzaC1lZDI1NTE5AAAAIGIn18t0VonWAGDpsiIuZApik8erVceVNjPX0mT4Z4Sy
+             AAAAC3NzaC1lZDI1NTE5AAAAILTfzZi3i3DqJQjW9H6XhseA0B5cg7F0+zUtgxBia87g
+backend = my_gdrive_backend
+root = /
 
-user2:
-    public_key: AAAAB3NzaC1yc2EAAAADAQABAAABAQDuwESFdAe14hVS6omeyX7edcJQdf
-    backend:
-        <<: *backend
-        _root: /user2    
+[user2]
+password = topsecret
+backend = my_onedrive_backend
+root = /user2
 ```
 
-## Running
+Passwords are stored as plaintext so try to use public keys instead (these are SSH public keys). A user may have more than one public key as shown above.
+The `backend` should match what you configured in `rclone.conf`.
 
-You may pass any additional arguments to rclone via Docker commands (see example below).
+## Details
+
+### Environment Variables
+
+| Name | Default | Purpose
+|-     |-        |-
+| `RCLONE_AUTH_PROXY_BACKENDS` | `/config/rclone.conf` | Path to rclone configuration file.
+| `RCLONE_AUTH_PROXY_USERS` | `/config/users.conf` | Path to user configuration file.
 
 ### Volumes
 
 | Volume | Purpose
 |-       |-
-| `/config` | Contains config file and cache
+| `/config` | Contains config file and cache.
 
 ### Ports
 
 | Port | Purpose
 |- |-
-| `2022` | SFTP (SSH, without console) port
+| `2022` | SFTP (SSH, without console)
 
 ## Example
 
@@ -57,8 +60,12 @@ Running directly
 docker run -v /host-path/config:/config -p 2022:2022 rclone-serve
 ```
 
-You may pass any additional arguments to rclone via Docker commands. For example,
-you might like to generate and use a static server key file (though rclone will generate one at start-up and cache this if you don't).
+You may pass any additional arguments to rclone via Docker commands. 
+For example, you might like to generate and use a static server key file (though rclone will generate one at start-up and cache this if you don't).
 ```
 docker run -v /host-path/config:/config -p 2022:2022 rclone-serve --key /config/id_rsa
 ```
+
+## Tags
+
+Tags mirror the rclone version. The image is rebuilt when a new rclone image becomes available.
