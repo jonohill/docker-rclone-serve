@@ -27,3 +27,10 @@ jobs:
           publish: ${{ github.ref == 'master' }}
           dockerHubUser: ${{ secrets.DOCKER_HUB_USER }}
           dockerHubPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      - name: Docker Hub Description
+        uses: peter-evans/dockerhub-description@v2.3.0
+        if: ${{ github.ref == 'master' }}
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKER_HUB_USER }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+          DOCKERHUB_REPOSITORY: jonoh/rclone-serve
