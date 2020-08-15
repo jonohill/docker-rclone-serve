@@ -1,13 +1,12 @@
-FROM rclone/rclone
+FROM rclone/rclone:1.52.3
 
 RUN apk add --no-cache \
-    python3 \
-    py3-pip
+    python3
 
-COPY auth-proxy/requirements.txt /tmp/requirements.txt
-RUN pip3 install -r /tmp/requirements.txt && \
-    rm /tmp/requirements.txt
-COPY auth-proxy/auth-proxy.py /usr/local/bin/auth-proxy
+COPY auth-proxy.py /usr/local/bin/auth-proxy
+
+ENV RCLONE_AUTH_PROXY_BACKENDS=/config/rclone.conf
+ENV RCLONE_AUTH_PROXY_USERS=/config/users.conf
 
 EXPOSE 2022
 
