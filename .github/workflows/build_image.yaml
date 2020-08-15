@@ -34,3 +34,4 @@ jobs:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKER_HUB_USER }}
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
           DOCKERHUB_REPOSITORY: jonoh/rclone-serve
+          README_FILEPATH: ./readme.md
