@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build:
@@ -21,6 +24,6 @@ jobs:
           tag: latest,${{ steps.get_rclone_version.outputs.RCLONE_VERSION }}
           imageName: jonoh/rclone-serve
           platform: linux/amd64,linux/386,linux/arm64,linux/arm/v7
-          publish: true
+          publish: ${{ github.ref == 'master' }}
           dockerHubUser: ${{ secrets.DOCKER_HUB_USER }}
           dockerHubPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
