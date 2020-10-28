@@ -19,7 +19,7 @@ jobs:
         id: get_rclone_version
         run: echo ::set-output name=RCLONE_VERSION::$(head -n1 Dockerfile | sed -n 's/FROM.*\:\(.*\)/\1/p')
       - name: Build and publish image
-        uses: ilteoood/docker_buildx@1.0.4
+        uses: ilteoood/docker_buildx@1.0.5
         with:
           tag: latest,${{ steps.get_rclone_version.outputs.RCLONE_VERSION }}
           imageName: jonoh/rclone-serve
