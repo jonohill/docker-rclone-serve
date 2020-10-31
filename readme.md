@@ -1,5 +1,7 @@
 # docker-rclone-serve
 
+[![GitHub last commit](https://img.shields.io/github/last-commit/jonohill/docker-rclone-serve?label=github+last+commit)](https://github.com/jonohill/docker-rclone-serve) [![Docker Image Version (latest semver)](https://img.shields.io/docker/v/jonoh/rclone-serve?label=docker+hub&sort=semver)](https://hub.docker.com/r/jonoh/rclone-serve)
+
 This image proxies any rclone-supported backend and serves this as an SFTP server (using `rclone serve`).
 By proxying a back-end, you can share it with multiple devices or users without having to share the backend credentials.
 
