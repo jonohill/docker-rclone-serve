@@ -1,4 +1,4 @@
-FROM rclone/rclone:1.54.0
+FROM rclone/rclone:1.54.1
 
 RUN apk add --no-cache \
     python3
