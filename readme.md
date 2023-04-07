@@ -42,6 +42,7 @@ The `backend` should match what you configured in `rclone.conf`.
 |-     |-        |-
 | `RCLONE_AUTH_PROXY_BACKENDS` | `/config/rclone.conf` | Path to rclone configuration file.
 | `RCLONE_AUTH_PROXY_USERS` | `/config/users.conf` | Path to user configuration file.
+| `RCLONE_OPTIONS` | `` | Additional rclone cli options like --transfers 32
 
 ### Volumes
 
