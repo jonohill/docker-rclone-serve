@@ -28,7 +28,7 @@ jobs:
           dockerHubUser: ${{ secrets.DOCKER_HUB_USER }}
           dockerHubPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
       - name: Docker Hub Description
-        uses: peter-evans/dockerhub-description@v4.0.1
+        uses: peter-evans/dockerhub-description@v4.0.2
         if: ${{ github.ref == 'refs/heads/master' }}
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKER_HUB_USER }}
