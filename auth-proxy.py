@@ -82,7 +82,7 @@ if not (backend_name := user_config.get('backend', '')):
 
 # Give rclone a chance to refresh any backend token, also checks the config
 try:
-    run(['rclone', '--config', backend_file_path, 'touch', '--no-create', f'{backend_name}:/{uuid4()}'], check=True)
+    run(['rclone', '--config', backend_file_path, 'touch', '--no-create', f'{backend_name}:{uuid4()}'], check=True)
 except:
     fail()
 
@@ -90,7 +90,6 @@ backend_config = configparser.ConfigParser()
 backend_config.read(backend_file_path)
 
 backend = { k: v for k, v in backend_config[backend_name].items() }
-if root := user_config.get('root', ''):
-    backend['_root'] = root
+backend['_root'] = user_config.get('root', '')
 
 print(json.dumps(backend))
