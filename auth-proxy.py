@@ -5,7 +5,6 @@ import json
 import sys
 from argparse import ArgumentParser
 from hmac import compare_digest
-from crypt import crypt
 import os
 import logging
 from subprocess import run
